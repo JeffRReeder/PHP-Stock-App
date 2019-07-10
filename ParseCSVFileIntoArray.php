@@ -56,12 +56,7 @@ for ($DisplayRow = 0; $DisplayRow < $arrayLength; $DisplayRow ++) {
 echo "</table>";
 echo "</pre>";
 
-// Name of COMPANY under the "Stock" column name (index[3] or 4th column)//////////////////////////////
-function getStockName($companyName, $All_Stock_Data, $TableRow) {
-    $companyName = array_column($All_Stock_Data, '3');	//grab column 4 "company name"
-    array_shift($companyName);                          //chop off top header
-    return $companyName[$TableRow];						//return "company name"
-}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -74,36 +69,11 @@ $floatArrayPricePerShareColumn = array(0.0);
 $floatArrayFeesColumn = array(0.0);
 
 
-//Create FLOAT array for "Transacted Shares" column
-for($x=1; $x < 20; $x++) {
-    array_push($floatArrayTransactedSharesColumn, $All_Stock_Data[$x][4]);
-}
-
-//create FLOAT array for "Price Per Share" column
-for($x=1; $x < 20; $x++) {
-    //echo " answer is: ". $All_Stock_Data[$x][5]. "</br>";
-    array_push($floatArrayPricePerShareColumn, $All_Stock_Data[$x][5]);
-  
-}
-
-//Create FLOAT array for "Fees" column
-for($x=1; $x < 20; $x++) {
-    //echo " answer is: ". $All_Stock_Data[$x][6]. "</br>";
-    array_push($floatArrayFeesColumn, $All_Stock_Data[$x][6]);
-  
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//this makes data ALL FLOATS!!!!!!!!!!
-$JeffTotalShares = array_map("floatval", $floatArrayTransactedSharesColumn); 
-
-
 
 
 echo "</br> ------------------------------------START of logic----------------------------------<br>";
 /////////////////////////////TESTING CODE AREA  ////////////////////////////////////////////
-
+/*
 echo "All stock STRING datat [0][0] is: " .$All_Stock_Data[0][0]. "</br>";
 echo "All stock STRING datat [0][1] is: " .$All_Stock_Data[0][1]. "</br>";
 echo "All stock STRING datat [0][2] is: " .$All_Stock_Data[0][2]. "</br>";
@@ -147,50 +117,9 @@ echo "All stock STRING datat [3][8] is: " .$All_Stock_Data[3][8]. "</br></br>";
 
 
 
+*/
 
 
-
-
-
-
-$buy_total = 0;
-$sell_total = 0;
-$div_total = 0;
-    for($i=1; $i < $arrayLength; $i++) {
-
-        /*
-        //BUY CONDITION
-        if ($All_Stock_Data[$i][2] == "Buy" && $All_Stock_Data[$i][3] == "Western Digital") {
-            $buyAmt = $All_Stock_Data[$i][4];
-            $buy_total += $All_Stock_Data[$i][4];
-            echo 'Row: ' . ($i+1) . ' Amount BUY: ' . $buyAmt .' Stock=' . $All_Stock_Data[$i][3]. '<br>';
-            echo '<pre>';
-            echo 'Buy total is: ';
-            var_dump ($buy_total);
-            echo '</pre>';
-        }
-        //SELL CONDITION
-        elseif ($All_Stock_Data[$i][2] == "Sell" && $All_Stock_Data[$i][3] == "Western Digital"){
-            $sellAmt = $All_Stock_Data[$i][4];
-            $sell_total += $All_Stock_Data[$i][4];
-            echo 'Row: ' . ($i+1) . ' Amount SELL: ' . $sellAmt . ' Stock='. $All_Stock_Data[$i][3]. '<br>';
-            echo '<pre>';
-            echo 'Sell total is: ';
-            var_dump ($sell_total);
-            echo '</pre>';
-        }
-        //DIVIDEND CONDITION
-        elseif ($All_Stock_Data[$i][2] == "Div" && $All_Stock_Data[$i][3] == "Western Digital"){
-            $divAmt = $All_Stock_Data[$i][4];
-            $div_total += $All_Stock_Data[$i][4];
-            echo 'Row: ' . ($i+1) . ' Amount DIVIDEND: ' . $divAmt . ' Stock='. $All_Stock_Data[$i][3]. '<br>';
-            echo '<pre>';
-            echo 'Dividend total is: ';
-            var_dump ($div_total);
-            echo '</pre>';
-        }
-    */
-    }//end of for loop
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $transacted_shares = 2.0;
     $price_per_share = 3.0;
@@ -209,12 +138,40 @@ $div_total = 0;
     $date = 0;
 
 
-    for($Table_Row = 0; $Table_Row < 39; $Table_Row++) {
+    $TableRow = 14;
+
+    /*
+    echo "Getstock name is: ". getStockName($All_Stock_Data, $TableRow)."</br>";
+
+    if (getTransactionType() == "Sell"){
+        echo "Stock name function works! and the name is: ".getTransactionType() ."</br>";
+    } else {
+        echo "Stock name function DOES NOT work</br>";
+    }
+*/
+
+
+
+
+    //grab type of transaction: "Buy", "Sell", "Div" or "Split"
+    function getTransactionType() {
+        global $All_Stock_Data, $TableRow;
+
+        $TransactionType = array_column($All_Stock_Data, '2');	//grab column 3 "Type"
+        array_shift($TransactionType);                           //chop off top header
+        return $TransactionType[$TableRow];						        //return "Type"
+    }
+
+
+
+
+
+    for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
 ///////////////////////////////////////   START COMPANY 1    /////////////////////////////////////////////////
 
         //BUY CONDITION
-        if ($All_Stock_Data[$Table_Row][2] == "Buy" && $All_Stock_Data[$Table_Row][3] == "Cisco Systems, Inc.") {
+        if ($All_Stock_Data[$Table_Row][2] == "Buy" && getStockName() == "Cisco Systems, Inc.") {
             $transacted_shares = $All_Stock_Data[$Table_Row][4];
             $total_shares_purchased += $All_Stock_Data[$Table_Row][4];
             $fees = $All_Stock_Data[$Table_Row][6];
@@ -245,7 +202,7 @@ $div_total = 0;
             }
         }//end of BUY CONDITION
         //SELL CONDITION
-        elseif ($All_Stock_Data[$Table_Row][2] == "Sell" && $All_Stock_Data[$Table_Row][3] == "Cisco Systems, Inc."){
+        elseif ($All_Stock_Data[$Table_Row][2] == "Sell" && getStockName() == "Cisco Systems, Inc."){
             $sellAmt = $All_Stock_Data[$Table_Row][4];
             $total_shares_sold += $All_Stock_Data[$Table_Row][4];
             $fees = $All_Stock_Data[$Table_Row][6];
@@ -314,9 +271,10 @@ $div_total = 0;
 
         }//end of SELL CONDITION
         //DIVIDEND CONDITION (or whatever)
-        elseif ($All_Stock_Data[$Table_Row][2] == "Div" && $All_Stock_Data[$Table_Row][3] == "Cisco Systems, Inc."){
+        elseif ($All_Stock_Data[$Table_Row][2] == "Div" && getStockName() == "Cisco Systems, Inc."){
             $transacted_shares = $All_Stock_Data[$Table_Row][4];
-            $div_total += $All_Stock_Data[$Table_Row][4];
+            //$div_total += $All_Stock_Data[$Table_Row][4];
+            //cho "DIV TOTAL IS: ". $div_total."</br>";
             $price_per_share = $All_Stock_Data[$Table_Row][5];
             $fees = $All_Stock_Data[$Table_Row][6];
             echo '</br>Row: ' . $Table_Row . ' Amount DIV =  ' . $transacted_shares . ' Stock='. $All_Stock_Data[$Table_Row][3].
@@ -348,12 +306,24 @@ $div_total = 0;
 
         }// end of DIVIDEND CONDITION
         else {
-            echo "Stock split</br>";
+            echo "Stock split or NOTHING</br>";
         }
 /////////////////////////////////////// END OF COMPANY 1    /////////////////////////////////////////////////
 
 
     } // end of for loop
+
+/////////////////////////////////////// FUNCTIONS (need to be moved to new file) /////////////////////
+
+
+    // Name of COMPANY under the "Stock" column name (index[3] or 4th column)//////////////////////////////
+    function getStockName() {
+        global $All_Stock_Data, $TableRow;
+
+        $companyName = array_column($All_Stock_Data, '3');	//grab column 4 "company name"
+        array_shift($companyName);                           //chop off top header
+        return $companyName[$TableRow];						        //return "company name"
+    }
 
 
     function profitLoss($cost_basis, $cost_basis_previous,$Profit_Loss, $transacted_shares,$price_per_share,$runningTotal ){

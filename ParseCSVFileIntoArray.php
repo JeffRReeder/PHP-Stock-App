@@ -5,13 +5,18 @@
 // This file opens a CSV file and displays it to webpage (duplicating "Transactions page" from old excel file)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//include("class_lib.php");
+
 ////////////////////////////////////////////    OPEN CSV FILE   ///////////////////////////////////////////////
 
 
-$filename = 'LowesExample-2.csv';
-//$filename = 'CiscoExample.csv';
+
+
+//$filename = 'LowesExample-2.csv';
+$filename = 'CiscoExample.csv';
 //$filename = 'WesternDigitalExample.csv';
 //$filename = 'WesternDigitalExample-2.csv';
+//$filename = 'All Test Cases.csv';
 
 // The nested array to hold all the arrays
 $All_Stock_Data = []; 
@@ -94,36 +99,7 @@ for($x=1; $x < 20; $x++) {
 $JeffTotalShares = array_map("floatval", $floatArrayTransactedSharesColumn); 
 
 
-/*
-//stackoverflow code
-$input_array = Array("1.1234", "3.123", "2.23E3", "2.23E-3");
 
-$result = array_map("floatval", $input_array);
-
-echo "<pre>";
-var_dump($input_array);
-var_dump($result);
-echo "</pre>";
-*/
-
-//$JeffTotalShares = array(23, 18, 5, 8, 10, 16);
-
-/*
-$original = array(23, 18, 5, 8, 10, 16);
-
-$total = array();
-$runningSum = 0;
-
-foreach ($original as $number) {
-    $runningSum += $number;
-    $total[] = $runningSum;
-}
-echo "<pre>";
-var_dump($total);
-echo "</pre>";
-*/
-
-//END of stackoverflow code
 
 echo "</br> ------------------------------------START of logic----------------------------------<br>";
 /////////////////////////////TESTING CODE AREA  ////////////////////////////////////////////
@@ -169,11 +145,19 @@ echo "All stock STRING datat [3][7] is: " .$All_Stock_Data[3][7]. "</br>";
 echo "All stock STRING datat [3][8] is: " .$All_Stock_Data[3][8]. "</br></br>";
 
 
+
+
+
+
+
+
+
+
 $buy_total = 0;
 $sell_total = 0;
 $div_total = 0;
     for($i=1; $i < $arrayLength; $i++) {
-        
+
         /*
         //BUY CONDITION
         if ($All_Stock_Data[$i][2] == "Buy" && $All_Stock_Data[$i][3] == "Western Digital") {
@@ -206,28 +190,31 @@ $div_total = 0;
             echo '</pre>';
         }
     */
-
     }//end of for loop
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     $transacted_shares = 2.0;
     $price_per_share = 3.0;
     $fees = 0.0;
-    $runningTotal = 0.0;
+    $running_fees_total = 0.0;
+    $runningTotal = 0.0; //this variable should be named "runningTotalShares"
     $total_shares_purchased = 0.0;
     $total_shares_sold = 0.0;
 
     $cost_basis = 0.0;
     $cost_basis_previous = 0.0;
     $Profit_Loss = 0.0;
-    $total_dividend = 0.0;
+    $total_dividends_paid = 0.0;
+    //might need variable named "AllDividendsPaid"????
     $Average_price_per_share = 0.0;
     $date = 0;
 
 
     for($Table_Row = 0; $Table_Row < 39; $Table_Row++) {
 
+///////////////////////////////////////   START COMPANY 1    /////////////////////////////////////////////////
+
         //BUY CONDITION
-        if ($All_Stock_Data[$Table_Row][2] == "Buy" && $All_Stock_Data[$Table_Row][3] == "Lowe's Companies, Inc.") {
+        if ($All_Stock_Data[$Table_Row][2] == "Buy" && $All_Stock_Data[$Table_Row][3] == "Cisco Systems, Inc.") {
             $transacted_shares = $All_Stock_Data[$Table_Row][4];
             $total_shares_purchased += $All_Stock_Data[$Table_Row][4];
             $fees = $All_Stock_Data[$Table_Row][6];
@@ -243,22 +230,27 @@ $div_total = 0;
                 echo "1st ROUND COST BASIS(zero) = ".$cost_basis . "</br>";
                 echo " Fees = ". $fees."</br>";
                 $cost_basis = ($fees + ($transacted_shares * $price_per_share));
+                fees($fees,$running_fees_total);
+
                 echo "We know this is first round so cost basis is = ".$cost_basis ."</br>";
                 echo "average price/per share (WORKS buy, if(costbasis = 0)= ". averagePricePerShare() . "</br>";
+
             }
             //We are adding to original purchase with more shares
             else {
                 addMoreShares($cost_basis,$cost_basis_previous);
                 averagePricePerShare();
                 echo "average price/per share (WORKS buy, else costbasis != 0) ". averagePricePerShare() . "</br>";
+                echo "Test fees function call". fees($fees,$running_fees_total). "</br>";
             }
         }//end of BUY CONDITION
         //SELL CONDITION
-        elseif ($All_Stock_Data[$Table_Row][2] == "Sell" && $All_Stock_Data[$Table_Row][3] == "Lowe's Companies, Inc."){
+        elseif ($All_Stock_Data[$Table_Row][2] == "Sell" && $All_Stock_Data[$Table_Row][3] == "Cisco Systems, Inc."){
             $sellAmt = $All_Stock_Data[$Table_Row][4];
             $total_shares_sold += $All_Stock_Data[$Table_Row][4];
+            $fees = $All_Stock_Data[$Table_Row][6];
             echo '</br>Row: ' . $Table_Row . ' Amount SELL: ' . $sellAmt . ' Stock='. $All_Stock_Data[$Table_Row][3].
-                ' Share Price= '.$All_Stock_Data[$Table_Row][5] .'<br>';
+                ' Share Price= '.$All_Stock_Data[$Table_Row][5] .' Fees = ' . $fees. '<br>';
 
             runningSharesTotalSell($Table_Row);
             echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";
@@ -272,16 +264,16 @@ $div_total = 0;
                     echo "Cost basis previous is: ".$cost_basis_previous ."</br>";
 
                     //profit or loss = buy price/shares - sell price/shares
-                    $sold_Shares = ($transacted_shares * $price_per_share);
+                    $sold_Shares = (($transacted_shares * $price_per_share) - $fees);
                     echo "Sold Shares profit/loss = ". $sold_Shares. "</br>";
                     echo "Previous BOUGHT SHARES Cost Basis = ". $cost_basis_previous. "</br>";
 
-                    // call profit loss function maybe?
                     $Profit_Loss = $sold_Shares - $cost_basis_previous;
+                    $running_gain_loss_total += $Profit_Loss;
 
                     // 172.28 - 224 = -51.72
-
                     echo " Profit/loss ". $sold_Shares. " - ". $cost_basis_previous." = " . $Profit_Loss. "</br>";
+                    echo "Test fees function call". fees($fees,$running_fees_total). "</br>";
 
                     echo " New Average price per share (WORKS! sold everything, should be zero) = " . $cost_basis. "</br>";
 
@@ -309,19 +301,20 @@ $div_total = 0;
                     echo " Realized gain/loss is = ". $realized_gain_or_loss."</br>";
                     $running_gain_loss_total += $realized_gain_or_loss;
                     echo " running total is NOT 0, so UPDATED cost basis after sale is = ". $cost_basis. "</br>";
-                    echo "CHECK FOR PROFIT/LOSS WHEN RUNNING TOTAL IS Changed. </br>";
+
 
 
                     $Profit_Loss = profitLoss($cost_basis, $cost_basis_previous,$Profit_Loss, $transacted_shares,$price_per_share,$runningTotal );
 
 
                     echo " Profit/loss on this sale is (incorrect should be negative?) = " . $Profit_Loss. "</br>";
+                    echo "Test fees function call". fees($fees,$running_fees_total). "</br>";
                     echo " average price/per share (WORKS Sell, else sold SOME shares) ". averagePricePerShare() . "</br>";
                 }
 
         }//end of SELL CONDITION
         //DIVIDEND CONDITION (or whatever)
-        elseif ($All_Stock_Data[$Table_Row][2] == "Div" && $All_Stock_Data[$Table_Row][3] == "Lowe's Companies, Inc."){
+        elseif ($All_Stock_Data[$Table_Row][2] == "Div" && $All_Stock_Data[$Table_Row][3] == "Cisco Systems, Inc."){
             $transacted_shares = $All_Stock_Data[$Table_Row][4];
             $div_total += $All_Stock_Data[$Table_Row][4];
             $price_per_share = $All_Stock_Data[$Table_Row][5];
@@ -332,18 +325,32 @@ $div_total = 0;
 
             echo " Dividend transacted shares = ". $transacted_shares. "</br>";
             echo " Dividend price_per_share = ". $price_per_share. "</br>";
-            echo " Total Dividend = ". $total_dividend. "</br>";
-            $total_dividend = $transacted_shares * $price_per_share;
-            $final_dividend += $total_dividend;
-            echo "total dividend = ".$total_dividend ."</br>";
-            echo " All dividends (final dividend) = ".$final_dividend ."</br>";
-            $date = $All_Stock_Data[$Table_Row][1];
-            echo "TESTING DATE PORTION " .$date . "</br>";
+            echo " Total Dividend = ". $total_dividends_paid. "</br>";
+
+
+            //getDividendAmount function call
+            $total_dividends_paid = getDividendAmount($Table_Row, $All_Stock_Data);
+
+            // calculate TOTAL DIVIDENDS PAID call goes here
+
+            $All_dividends = getTotalDividend($total_dividends_paid);
+            //$final_dividend += $total_dividends_paid;
+
+
+            echo "</br>All dividends (after getTotalDividend call) = ".$All_dividends ."</br>";
+
+            //getDividendMonth function call
+            $DividendMonth = getDividendMonth($Table_Row);
+            echo "</br>Month this dividend was paid is: ".$DividendMonth ."</br>";
+
+            //fees function call
+            echo "Test fees function call (Should be zero fees on dividend) ". fees($fees,$running_fees_total). "</br>";
 
         }// end of DIVIDEND CONDITION
         else {
             echo "Stock split</br>";
         }
+/////////////////////////////////////// END OF COMPANY 1    /////////////////////////////////////////////////
 
 
     } // end of for loop
@@ -360,10 +367,6 @@ $div_total = 0;
 
         $Profit_Loss =  $cost_basis_previous - $cost_basis;
         echo "INSIDE profit-loss function (Profit_Loss RECALCULATED) is: ". $Profit_Loss ."</br>";
-        //$average_price_per_share = (($cost_basis_previous + $Profit_Loss) / $runningTotal);
-
-
-
         echo "testing PROFIT--LOSS function--------END----------------------------</br>";
 
     }
@@ -413,15 +416,62 @@ $div_total = 0;
         $runningTotal -= $transacted_shares;
 
     }
-    //Average price per share = cost basis (how much you paid for stocks) / how many shares you own
-    //cost basis: (cost of all shares and RE-invested dividends, NOT dividends taken as cash.)
-    // Ex 100 shares of stock purchase for $1000, first year REINVESTED dividends $100, second year REINVESTED
-    // dividends $200. If you sell at $1500 taxable gains is $200 ($1500 - $1300) instead of $500 ($1500 - $1000).
-    // REINVESTED dividends are just like buying more shares increasing your total shares a.k.a cost basis
-    //average_price_per_share = $cost_basis / $runningTotal;
+
+    function fees($fees, $running_fees_total){
+        global $fees,$running_fees_total;
+        echo " CALCULATE FEES function--------BEGIN----------------------------</br>";
+        echo "Fees on this transaction are: ". $fees."</br>";
+        $running_fees_total = $running_fees_total + $fees;
+        echo "Total fees up to this point are:  ". $running_fees_total."</br>";
+        echo " CALCULATE FEES function--------END----------------------------</br>";
+    }
+
+    //display dividend amount in table (under month column) = make into function
+
+    function getDividendMonth($Table_Row){
+
+        global $All_Stock_Data;
+
+        echo "------------- START GET MONTH FUNCTION------------------------";
+        $DividendMonth = $All_Stock_Data[$Table_Row][1];
+
+        $StringTime = strtotime($DividendMonth);
+        echo "</br>UNIX time from ".$DividendMonth ." is ".$StringTime . "</br>";
+        $IntegerTime = getdate($StringTime);
 
 
+        $month = $IntegerTime["mon"];
+        echo "Month from ".$DividendMonth ." is: ". $month."</br>";
+        echo "------------- END GET MONTH FUNCTION------------------------";
+        return $month;
+    }
 
+    function getDividendAmount($Table_Row, $All_Stock_Data){
+
+        global $All_Stock_Data;
+        echo "GET DIV AMOUNT FUNCTION---------BEGIN---------------";
+        $transacted_shares = $All_Stock_Data[$Table_Row][4];
+        $price_per_share = $All_Stock_Data[$Table_Row][5];
+        $DividendAmount = $transacted_shares * $price_per_share;
+
+        echo "</br>Dividend amount is:" .$DividendAmount ."</br>";
+        echo "GET DIV AMOUNT  FUNCTION---------END---------------";
+        return $DividendAmount;
+    }
+
+    function getTotalDividend($total_dividends_paid){
+
+        global $final_dividend, $total_dividends_paid;
+        echo "</br>GET TOTAL DIVIDEND FUNCTION---------BEGIN---------------";
+
+        //code from above
+        $final_dividend += $total_dividends_paid;
+
+
+        echo "</br>Final dividend  amount is:" .$final_dividend ."</br>";
+        echo "GET TOTAL DIVIDEND  FUNCTION---------END---------------";
+        return $final_dividend;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     echo "</br>";
@@ -430,11 +480,8 @@ $div_total = 0;
     echo " Total stock (after buy/sell) is : " . $runningTotal . "</br>";
     echo " Total Dividends paid out is: " . $final_dividend . "</br>";
     echo " Realized gain/loss is: " . $running_gain_loss_total. "</br>";
+    echo " Total fees on this stock are: " . $running_fees_total. "</br>";
 
-
-
-
-/////////////////////////////END OF TESTING CODE AREA/////////////////////////////////////////
 
 echo " -------------------------------END of logic---------------------------------------" . '<br>';
 

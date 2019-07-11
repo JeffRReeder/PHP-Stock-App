@@ -135,7 +135,7 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         //PREVIOUS SHARES column (8) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][8] = $runningTotal;
 
-        //PREVIOUS COST column (11) for DISPLAY
+        //PREVIOUS COST column (11) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][11] = $cost_basis;
 
 
@@ -186,7 +186,7 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
             echo "transacted value is: (what variable)".$transacted_value ."</br>";
 
-            //TRANSACTED VALUE column (10) for DISPLAY
+            //TRANSACTED VALUE column (10) for DISPLAY (don't fuck with it)
             $All_Stock_Data[$Table_Row][10] = $transacted_value;
 
 
@@ -211,6 +211,9 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
         //CUMULATIVE SHARES column (9) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][9] = $runningTotal;
+
+        //PREVIOUS COST column (11) for DISPLAY (don't fuck with it)
+        $All_Stock_Data[$Table_Row][11] = $cost_basis;
 
         //you have sold ALL shares and your cost basis is reset to zero.
         if ($runningTotal == 0.0){
@@ -273,11 +276,11 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         echo " Dividend price_per_share = ". getPricePerShare($Table_Row). "</br>";
         echo " Total Dividend = ". $total_dividends_paid. "</br>";
 
-        //PREVIOUS SHARES column (8) for DISPLAY
+        //PREVIOUS SHARES column (8) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][8] = $runningTotal;
-        //PREVIOUS SHARES column (9) for DISPLAY
+        //PREVIOUS SHARES column (9) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][9] = $runningTotal;
-        //PREVIOUS COST column (11) for DISPLAY
+        //PREVIOUS COST column (11) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][11] = $cost_basis;
 
         echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";

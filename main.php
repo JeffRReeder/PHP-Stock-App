@@ -250,6 +250,10 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             //  91.36 = ((811.50 / 17.755954) * 2 shares)
             $cost_of_transaction = (($cost_basis / $number_of_shares_before_sell) * getTransactionShares($Table_Row));
             echo " cost of transaction (91.36) = ". $cost_of_transaction. "</br>";
+
+            //COST OF TRANSACTION column (12) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][12] = $cost_of_transaction;
+
             //811.50 - 91.36 = 719.695
             $cost_basis = $cost_basis - $cost_of_transaction;
             // Real gain loss from sale (0.86)
@@ -262,6 +266,9 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             echo " Profit/loss on this sale is (incorrect should be negative?) = " . $Profit_Loss. "</br>";
             echo "Test fees function call". fees($fees,$running_fees_total). "</br>";
             echo " average price/per share (WORKS Sell, else sold SOME shares) ". averagePricePerShare() . "</br>";
+
+            //COST OF TRANSACTION PER SHARE column (14) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][13] = averagePricePerShare();
         }
     }//end of SELL CONDITION
     //DIVIDEND CONDITION (or whatever)

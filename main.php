@@ -132,9 +132,11 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
         getTransactionShares($Table_Row);
 
-        //PREVIOUS SHARES column (8) for DISPLAY
+        //PREVIOUS SHARES column (8) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][8] = $runningTotal;
 
+        //PREVIOUS VALUE column (11) for DISPLAY
+        $All_Stock_Data[$Table_Row][11] = $cost_basis;
 
 
         $total_shares_purchased += $All_Stock_Data[$Table_Row][4];
@@ -144,7 +146,7 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             ' Share Price= '.$All_Stock_Data[$Table_Row][5] .' Fees = ' . $fees. '<br>';
         echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";
 
-        //CUMULATIVE SHARES column (9) for DISPLAY
+        //CUMULATIVE SHARES column (9) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][9] = $runningTotal;
 
 
@@ -165,6 +167,8 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             echo "We know this is first round so cost basis is = ".$cost_basis ."</br>";
 
 
+            //TRANSACTED VALUE [first buy] column (10) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][10] = $cost_basis;
 
             echo "average price/per share (WORKS buy, if(costbasis = 0)= ". averagePricePerShare() . "</br>";
         }
@@ -177,6 +181,9 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             //fees($fees,$running_fees_total);
 
             addMoreShares($cost_basis,$cost_basis_previous);
+
+
+
             echo "transacted value is: (what variable)".$transacted_value ."</br>";
 
             //TRANSACTED VALUE column (10) for DISPLAY

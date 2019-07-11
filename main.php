@@ -253,6 +253,13 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         echo " Dividend transacted shares = ". getTransactionShares($Table_Row) . "</br>";
         echo " Dividend price_per_share = ". getPricePerShare($Table_Row). "</br>";
         echo " Total Dividend = ". $total_dividends_paid. "</br>";
+
+        //PREVIOUS SHARES column (8) for DISPLAY
+        $All_Stock_Data[$Table_Row][8] = $runningTotal;
+        //PREVIOUS SHARES column (9) for DISPLAY
+        $All_Stock_Data[$Table_Row][9] = $runningTotal;
+
+        echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";
         //getDividendAmount function call
         $total_dividends_paid = getDividendAmount($Table_Row);
 

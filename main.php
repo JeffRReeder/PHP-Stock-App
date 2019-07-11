@@ -96,6 +96,7 @@ echo "All stock STRING datat [3][8] is: " .$All_Stock_Data[3][8]. "</br></br>";
 */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $transacted_shares = 2.0;
+$transacted_value = 0.0;
 $price_per_share = 3.0;
 $fees = 0.0;
 $running_fees_total = 0.0;
@@ -173,8 +174,12 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             //addMoreShares($cost_basis,$cost_basis_previous);
             //averagePricePerShare();
             //fees($fees,$running_fees_total);
-            addMoreShares($cost_basis,$cost_basis_previous);
 
+            addMoreShares($cost_basis,$cost_basis_previous);
+            echo "transacted value is: (what variable)".$transacted_value ."</br>";
+
+            //CUMULATIVE SHARES column (9) for DISPLAY
+            $All_Stock_Data[$Table_Row][10] = $transacted_value;
 
 
             echo "average price/per share (WORKS buy, else costbasis != 0) ". averagePricePerShare() . "</br>";

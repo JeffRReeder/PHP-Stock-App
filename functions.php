@@ -39,7 +39,7 @@ function averagePricePerShare(){
     return $average_price_per_share;
 }
 function addMoreShares($cost_basis,$cost_basis_previous){
-    global $cost_basis, $cost_basis_previous, $transacted_shares, $Table_Row, $fees;
+    global $cost_basis, $cost_basis_previous, $transacted_shares, $transacted_value, $Table_Row, $fees;
 
     echo " ADD MORE SHARES function--------BEGIN----------------------------</br>";
     $cost_basis_previous = $cost_basis;
@@ -47,7 +47,10 @@ function addMoreShares($cost_basis,$cost_basis_previous){
     $cost_basis = ($fees + ($transacted_shares * getPricePerShare($Table_Row)));
     echo " ADD MORE SHARES transacted shares= " . $transacted_shares . "</br>";
     echo " ADD MORE SHARES price per share= " . getPricePerShare($Table_Row) . "</br>";
+    $transacted_value = $cost_basis;
+    echo " Transacted value is (transacted value)".$transacted_value ."</br>";
     echo " ADD MORE SHARES Cost basis (Either new shares or Dividend re-invest) " . $cost_basis . "</br>";
+
     $cost_basis = $cost_basis + $cost_basis_previous;
     echo " ADD MORE SHARES--CUMULATIVE Cost Basis= " . $cost_basis . "</br>";
     echo " ADD MORE SHARES function--------END----------------------------</br>";

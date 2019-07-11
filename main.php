@@ -178,7 +178,7 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             addMoreShares($cost_basis,$cost_basis_previous);
             echo "transacted value is: (what variable)".$transacted_value ."</br>";
 
-            //CUMULATIVE SHARES column (9) for DISPLAY
+            //TRANSACTED VALUE column (10) for DISPLAY
             $All_Stock_Data[$Table_Row][10] = $transacted_value;
 
 
@@ -273,6 +273,9 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
         //$final_dividend += $total_dividends_paid;
         echo "</br>All dividends (after getTotalDividend call) = ".$All_dividends ."</br>";
+
+        //TRANSACTED VALUE column (10) for DISPLAY
+        $All_Stock_Data[$Table_Row][10] = $total_dividends_paid;
 
         //getDividendMonth function call
         $DividendMonth = getDividendMonth($Table_Row);

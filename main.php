@@ -97,6 +97,7 @@ echo "All stock STRING datat [3][8] is: " .$All_Stock_Data[3][8]. "</br></br>";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $transacted_shares = 2.0;
 $transacted_value = 0.0;
+$transacted_value_on_sell = 0.0;
 $price_per_share = 3.0;
 $fees = 0.0;
 $running_fees_total = 0.0;
@@ -194,14 +195,14 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         echo '</br>Row: ' . $Table_Row . ' Amount SELL: ' . $sellAmt . ' Stock= '. $All_Stock_Data[$Table_Row][3].
             ' Share Price= '.$All_Stock_Data[$Table_Row][5] .' Fees = ' . $fees. '<br>';
 
-        //PREVIOUS SHARES column (8) for DISPLAY
+        //PREVIOUS SHARES column (8) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][8] = $runningTotal;
 
         runningSharesTotalSell($Table_Row);
         echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";
         echo " SELL CONDITION cost basis from previous row is: ". $cost_basis. "</br>";
 
-        //CUMULATIVE SHARES column (9) for DISPLAY
+        //CUMULATIVE SHARES column (9) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][9] = $runningTotal;
 
         //you have sold ALL shares and your cost basis is reset to zero.
@@ -224,7 +225,13 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         // you only sold SOME of your shares and recalculated cost basis, profit/loss, avg price/share
         else {
             $cost_basis_previous = $cost_basis;
-            echo "Cost (92.22) ". getPricePerShare($Table_Row) * getTransactionShares($Table_Row)."</br>";
+            $transacted_value_on_sell = getPricePerShare($Table_Row) * getTransactionShares($Table_Row);
+
+            //TRANSACTED VALUE column (10) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][10] = $transacted_value_on_sell;
+
+
+            echo "Cost (92.22) ". $transacted_value_on_sell."</br>";
             $number_of_shares_before_sell = (getTransactionShares($Table_Row) + $runningTotal);
             echo " number_of_shares_before_sell = ". $number_of_shares_before_sell. "</br>";
             echo " sold shares = ". getTransactionShares($Table_Row) . "</br>";

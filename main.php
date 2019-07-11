@@ -138,6 +138,9 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         //PREVIOUS COST column (11) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][11] = $cost_basis;
 
+        //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
+        $All_Stock_Data[$Table_Row][14] = $cost_basis;
+
 
         $total_shares_purchased += $All_Stock_Data[$Table_Row][4];
         $fees = $All_Stock_Data[$Table_Row][6];
@@ -183,8 +186,10 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             addMoreShares($cost_basis,$cost_basis_previous);
 
 
+            //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][14] = $cost_basis;
 
-            echo "transacted value is: (what variable)".$transacted_value ."</br>";
+
 
             //TRANSACTED VALUE column (10) for DISPLAY (don't fuck with it)
             $All_Stock_Data[$Table_Row][10] = $transacted_value;
@@ -289,6 +294,8 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         $All_Stock_Data[$Table_Row][9] = $runningTotal;
         //PREVIOUS COST column (11) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][11] = $cost_basis;
+        //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
+        $All_Stock_Data[$Table_Row][14] = $cost_basis;
 
         echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";
         //getDividendAmount function call

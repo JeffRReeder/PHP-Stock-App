@@ -111,6 +111,7 @@ $total_dividends_paid = 0.0;
 //might need variable named "AllDividendsPaid"????
 $Average_price_per_share = 0.0;
 $date = 0;
+$yield_on_cost = 0.0;
 $TableRow = 14;
 
 /*
@@ -137,9 +138,6 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
         //PREVIOUS COST column (11) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][11] = $cost_basis;
-
-        //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
-        $All_Stock_Data[$Table_Row][14] = $cost_basis;
 
 
         $total_shares_purchased += $All_Stock_Data[$Table_Row][4];
@@ -172,6 +170,9 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
             //TRANSACTED VALUE [first buy] column (10) for DISPLAY (don't fuck with it)
             $All_Stock_Data[$Table_Row][10] = $cost_basis;
+
+            //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][14] = $cost_basis;
 
             echo "average price/per share (WORKS buy, if(costbasis = 0)= ". averagePricePerShare() . "</br>";
         }
@@ -274,6 +275,12 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
             //COST OF TRANSACTION PER SHARE column (14) for DISPLAY (don't fuck with it)
             $All_Stock_Data[$Table_Row][13] = averagePricePerShare();
+
+            //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][14] = $cost_basis;
+
+            //GAIN-LOSS FROM SALE column (15) for DISPLAY (don't fuck with it)
+            $All_Stock_Data[$Table_Row][15] = $realized_gain_or_loss;
         }
     }//end of SELL CONDITION
     //DIVIDEND CONDITION (or whatever)
@@ -297,6 +304,7 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         //CUMULATIVE COST column (14) for DISPLAY (don't fuck with it)
         $All_Stock_Data[$Table_Row][14] = $cost_basis;
 
+
         echo " RUNNING TOTAL WORKS! (Don't fuck with it) == " .$runningTotal . "</br>";
         //getDividendAmount function call
         $total_dividends_paid = getDividendAmount($Table_Row);
@@ -307,8 +315,19 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         //$final_dividend += $total_dividends_paid;
         echo "</br>All dividends (after getTotalDividend call) = ".$All_dividends ."</br>";
 
+
+        getYieldOnCost();
+
         //TRANSACTED VALUE column (10) for DISPLAY
         $All_Stock_Data[$Table_Row][10] = $total_dividends_paid;
+        //GAIN-LOSS FROM SALE column (15) for DISPLAY (don't fuck with it)
+        $All_Stock_Data[$Table_Row][15] = $total_dividends_paid;
+        //YIELD ON COST column (16) for DISPLAY (don't fuck with it)
+        $All_Stock_Data[$Table_Row][16] = $yield_on_cost;
+
+
+
+
 
         //getDividendMonth function call
         $DividendMonth = getDividendMonth($Table_Row);

@@ -92,6 +92,7 @@ function getDividendMonth($Table_Row){
     return $month;
 }
 function getDividendAmount($Table_Row){
+    global $DividendAmount;
 
     echo "GET DIV AMOUNT FUNCTION---------BEGIN---------------";
     $DividendAmount = getTransactionShares($Table_Row) * getPricePerShare($Table_Row);
@@ -109,4 +110,21 @@ function getTotalDividend($total_dividends_paid){
     echo "GET TOTAL DIVIDEND  FUNCTION---------END---------------";
     return $final_dividend;
 }
+
+function getYieldOnCost(){
+    global $DividendAmount,$cost_basis, $yield_on_cost;
+
+    echo "</br>YIELD ON COST FUNCTION---------BEGIN---------------</br>";
+    echo "Previous cost basis is (501.07): ".$cost_basis ."</br>";
+    echo "Dividend Amount is (3.40): ". $DividendAmount;
+    //0.68% = ( 100 *(3.40) / (501.07))
+    $yield_on_cost = (($DividendAmount) / ($cost_basis) * 100);
+
+
+    echo "</br>Yield on cost amount is (0.68% = ( 100 *(3.40) / (501.07)):" .$yield_on_cost ."</br>";
+    echo "YIELD ON COST FUNCTION--------------END---------------</br>";
+    //return $yield_on_cost;
+}
+
+
 ?>

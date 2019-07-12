@@ -281,6 +281,10 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
             //GAIN-LOSS FROM SALE column (15) for DISPLAY (don't fuck with it)
             $All_Stock_Data[$Table_Row][15] = $realized_gain_or_loss;
+
+
+            //YIELD ON COST column (16) for DISPLAY (don't fuck with it)
+            //$All_Stock_Data[$Table_Row][16] = $yield_on_cost;
         }
     }//end of SELL CONDITION
     //DIVIDEND CONDITION (or whatever)
@@ -320,10 +324,15 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
 
         //TRANSACTED VALUE column (10) for DISPLAY
         $All_Stock_Data[$Table_Row][10] = $total_dividends_paid;
+
         //GAIN-LOSS FROM SALE column (15) for DISPLAY (don't fuck with it)
-        $All_Stock_Data[$Table_Row][15] = $total_dividends_paid;
+        $gain_loss_formatted = round($total_dividends_paid,3);
+        //$gain_loss_formatted = sprintf("%.2f%%",$total_dividends_paid);
+        $All_Stock_Data[$Table_Row][15] = $gain_loss_formatted;
+
         //YIELD ON COST column (16) for DISPLAY (don't fuck with it)
-        $All_Stock_Data[$Table_Row][16] = $yield_on_cost;
+        $yield_on_cost_formatted = sprintf("%.2f%%",$yield_on_cost);
+        $All_Stock_Data[$Table_Row][16] = $yield_on_cost_formatted;
 
 
 

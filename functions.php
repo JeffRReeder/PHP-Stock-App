@@ -1,8 +1,6 @@
 
 <?php
 
-
-
 // get 5th column "Transacted shares"
 function getTransactionShares($Table_Row) {
     global $All_Stock_Data;
@@ -20,16 +18,9 @@ function getPricePerShare($Table_Row) {
 }
 
 function profitLoss($cost_basis, $cost_basis_previous,$Profit_Loss){
-    global $cost_basis, $Profit_Loss, $Table_Row;
+    global $cost_basis, $Profit_Loss;
 
-    echo " PROFIT--LOSS function--------BEGIN----------------------------</br>";
-    echo " PROFIT--LOSS function (cost basis previous) is: ".$cost_basis_previous ."</br>";
-    echo " PROFIT--LOSS function (cost basis Now) is: ".$cost_basis ."</br>";
-    echo " PROFIT--LOSS function (transacted_shares) is: ".getTransactionShares($Table_Row) ."</br>";
-    echo " PROFIT--LOSS function (price_per_share) is: ".getPricePerShare($Table_Row) ."</br>";
     $Profit_Loss =  $cost_basis_previous - $cost_basis;
-
-    echo " PROFIT--LOSS function--------END----------------------------</br>";
     return $Profit_Loss;
 }
 //Average price per share = Cost Basis / total shares
@@ -41,21 +32,12 @@ function averagePricePerShare(){
 function addMoreShares($cost_basis,$cost_basis_previous){
     global $cost_basis, $cost_basis_previous, $transacted_shares, $transacted_value, $Table_Row, $fees;
 
-    echo " ADD MORE SHARES function--------BEGIN----------------------------</br>";
     $cost_basis_previous = $cost_basis;
-    echo " ADD MORE SHARES cost_basis_previous should be previous = " . $cost_basis_previous . "</br>";
     $cost_basis = ($fees + ($transacted_shares * getPricePerShare($Table_Row)));
-    echo " ADD MORE SHARES transacted shares= " . $transacted_shares . "</br>";
-    echo " ADD MORE SHARES price per share= " . getPricePerShare($Table_Row) . "</br>";
     $transacted_value = $cost_basis;
-    echo " Transacted value is (transacted value)".$transacted_value ."</br>";
-    echo " ADD MORE SHARES Cost basis (Either new shares or Dividend re-invest) " . $cost_basis . "</br>";
-
     $cost_basis = $cost_basis + $cost_basis_previous;
-    echo " ADD MORE SHARES--CUMULATIVE Cost Basis= " . $cost_basis . "</br>";
-    echo " ADD MORE SHARES function--------END----------------------------</br>";
 }
-//$cost_basis = ($fees + ($transacted_shares * $price_per_share));
+
 function runningSharesTotalBuy($Table_Row){
     global $transacted_shares, $runningTotal;
 
@@ -71,11 +53,19 @@ function runningSharesTotalSell($Table_Row){
 function fees($fees, $running_fees_total){
     global $fees,$running_fees_total;
 
-    echo " CALCULATE FEES function--------BEGIN----------------------------</br>";
-    echo "Fees on this transaction are: ". $fees."</br>";
     $running_fees_total = $running_fees_total + $fees;
-    echo "Total fees up to this point are:  ". $running_fees_total."</br>";
-    echo " CALCULATE FEES function--------END----------------------------</br>";
+}
+function getTotalDividend($total_dividends_paid){
+    global $final_dividend, $total_dividends_paid;
+
+    $final_dividend += $total_dividends_paid;
+    return $final_dividend;
+}
+function getDividendAmount($Table_Row){
+    global $DividendAmount;
+
+    $DividendAmount = getTransactionShares($Table_Row) * getPricePerShare($Table_Row);
+    return $DividendAmount;
 }
 
 function getDividendMonth($Table_Row){
@@ -91,40 +81,16 @@ function getDividendMonth($Table_Row){
     echo "------------- END GET MONTH FUNCTION------------------------";
     return $month;
 }
-function getDividendAmount($Table_Row){
-    global $DividendAmount;
 
-    echo "GET DIV AMOUNT FUNCTION---------BEGIN---------------";
-    $DividendAmount = getTransactionShares($Table_Row) * getPricePerShare($Table_Row);
-    echo "</br>Dividend amount is:" .$DividendAmount ."</br>";
-    echo "GET DIV AMOUNT  FUNCTION---------END---------------";
-    return $DividendAmount;
-}
-function getTotalDividend($total_dividends_paid){
-    global $final_dividend, $total_dividends_paid;
-
-    echo "</br>GET TOTAL DIVIDEND FUNCTION---------BEGIN---------------";
-
-    $final_dividend += $total_dividends_paid;
-    echo "</br>Final dividend  amount is:" .$final_dividend ."</br>";
-    echo "GET TOTAL DIVIDEND  FUNCTION---------END---------------";
-    return $final_dividend;
-}
-
-function getYieldOnCost(){
+function getYieldOnCostDividend(){
     global $DividendAmount,$cost_basis, $yield_on_cost;
 
-    echo "</br>YIELD ON COST FUNCTION---------BEGIN---------------</br>";
-    echo "Previous cost basis is (501.07): ".$cost_basis ."</br>";
-    echo "Dividend Amount is (3.40): ". $DividendAmount;
-    //0.68% = ( 100 *(3.40) / (501.07))
     $yield_on_cost = (($DividendAmount) / ($cost_basis) * 100);
-
-
-    echo "</br>Yield on cost amount is (0.68% = ( 100 *(3.40) / (501.07)):" .$yield_on_cost ."</br>";
-    echo "YIELD ON COST FUNCTION--------------END---------------</br>";
-    //return $yield_on_cost;
 }
 
+function getYieldOnCostOnSale(){
+    global $Profit_Loss, $realized_gain_or_loss, $yield_on_cost_sell;
 
+    $yield_on_cost_sell = (($realized_gain_or_loss) / ($Profit_Loss) * 100);
+}
 ?>

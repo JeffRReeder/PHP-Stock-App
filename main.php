@@ -283,8 +283,11 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
             $All_Stock_Data[$Table_Row][15] = $realized_gain_or_loss;
 
 
+            getYieldOnCostOnSale();
             //YIELD ON COST column (16) for DISPLAY (don't fuck with it)
-            //$All_Stock_Data[$Table_Row][16] = $yield_on_cost;
+            $yield_on_cost_formatted = sprintf("%.2f%%",$yield_on_cost_sell);
+            $All_Stock_Data[$Table_Row][16] = $yield_on_cost_formatted;
+
         }
     }//end of SELL CONDITION
     //DIVIDEND CONDITION (or whatever)
@@ -320,7 +323,7 @@ for($Table_Row = 0; $Table_Row < $arrayLength; $Table_Row++) {
         echo "</br>All dividends (after getTotalDividend call) = ".$All_dividends ."</br>";
 
 
-        getYieldOnCost();
+        getYieldOnCostDividend();
 
         //TRANSACTED VALUE column (10) for DISPLAY
         $All_Stock_Data[$Table_Row][10] = $total_dividends_paid;
@@ -359,7 +362,7 @@ echo "</br>";
 echo " Total shares purchased is: ". $total_shares_purchased . "</br>";
 echo " Total shares sold is : " . $total_shares_sold . "</br>";
 echo " Total stock (after buy/sell) is : " . $runningTotal . "</br>";
-echo " Total Dividends paid out is: " . $final_dividend . "</br>";
+//echo " Total Dividends paid out is: " . $final_dividend . "</br>";
 echo " Realized gain/loss is: " . $running_gain_loss_total. "</br>";
 echo " Total fees on this stock are: " . $running_fees_total. "</br>";
 echo " -------------------------------END of logic---------------------------------------" . '<br>';
